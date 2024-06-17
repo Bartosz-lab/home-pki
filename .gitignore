@@ -4,3 +4,4 @@ __pycache__/
 
 ocsp/data/
 ocsp/certs/
+ocsp-root/data/

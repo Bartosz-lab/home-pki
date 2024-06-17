@@ -20,8 +20,8 @@ WARNING: Scripts assumes that the step-ca database never deletes data and that t
 
 ## Volumes
 
-- `usr/src/app/data` is the volume where the OCSP database is stored. This volume should be mounted to a persistent volume.
-- `usr/src/app/certs` is the volume where the OCSP responder stores the certificates. This volume should be mounted to a persistent volume.
+- `/usr/src/app/data` is the volume where the OCSP database is stored. This volume should be mounted to a persistent volume.
+- `/usr/src/app/certs` is the volume where the OCSP responder stores the certificates. This volume should be mounted to a persistent volume.
     - `root_ca.crt` is the root CA certificate.
     - `ca.crt` is the CA certificate for the OCSP responder.
     - `ocsp.crt` is the OCSP certificate.

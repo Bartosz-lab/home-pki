@@ -16,8 +16,14 @@ RUN mkdir -p /usr/src/app/data
 # certs volume
 RUN mkdir -p /usr/src/app/certs
 
-# healthcheck
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --start-interval= --retries=3 CMD openssl ocsp -CAfile /usr/src/app/certs/root_ca.crt -issuer /usr/src/app/certs/ca.crt -url http://localhost:80/  -cert /usr/src/app/certs/ocsp.crt 
+# Its only checking the availability of the OCSP server
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --start-interval=10s --retries=3 \
+    CMD openssl ocsp \
+    -CAfile /usr/src/app/certs/root_ca.crt \
+    -issuer /usr/src/app/certs/ca.crt \
+    -url http://localhost:80/  \
+    -cert /usr/src/app/certs/ocsp.crt 
 
+EXPOSE 80
 CMD ["/usr/local/bin/python", "./init_container.py"]
 

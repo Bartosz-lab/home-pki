@@ -1,0 +1,20 @@
+FROM alpine:3
+
+RUN mkdir -p /etc/ocsp
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./init_container.sh /usr/src/app/init_container.sh
+
+RUN apk add --no-cache openssl
+
+# Its only checking the availability of the OCSP server
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --start-interval=5s --retries=2 \
+    CMD openssl ocsp -CAfile /etc/ocsp/ca.crt \
+    -issuer /etc/ocsp/ca.crt \
+    -url http://localhost:80/  \
+    -cert /etc/ocsp/ocsp.crt \
+    -noverify 
+
+EXPOSE 80
+CMD [ "sh", "./init_container.sh" ]
