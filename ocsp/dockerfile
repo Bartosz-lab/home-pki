@@ -1,0 +1,23 @@
+FROM python:3-alpine
+
+WORKDIR /usr/src/app
+
+# ocsp responder
+RUN apk add --no-cache openssl
+
+# python ocsp database refresher
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY src/ .
+
+# data volume
+RUN mkdir -p /usr/src/app/data
+
+# certs volume
+RUN mkdir -p /usr/src/app/certs
+
+# healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --start-interval= --retries=3 CMD openssl ocsp -CAfile /usr/src/app/certs/root_ca.crt -issuer /usr/src/app/certs/ca.crt -url http://localhost:80/  -cert /usr/src/app/certs/ocsp.crt 
+
+CMD ["/usr/local/bin/python", "./init_container.py"]
+
