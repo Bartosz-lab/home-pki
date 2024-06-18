@@ -66,7 +66,7 @@ def processTemplate(src: str, params: Mapping[str, object] = {}) -> str:
 
 def generatePassword() -> str:
     """Generate a random password."""
-    alphabet = string.ascii_letters + string.digits + string.punctuation
+    alphabet = string.ascii_letters + string.digits + "!@#%^&*()_+{}:<>?"
     return "".join(secrets.choice(alphabet) for _ in range(40))
 
 

@@ -9,4 +9,5 @@ psql -v ON_ERROR_STOP=1 -U postgres <<- EOSQL
     CREATE USER "${dbUser}" PASSWORD '${dbPassword}';
     CREATE DATABASE "${dbUser}";
     GRANT ALL PRIVILEGES ON DATABASE "${dbUser}" TO "${dbUser}";
+    ALTER DATABASE "${dbUser}" OWNER TO "${dbUser}";
 EOSQL

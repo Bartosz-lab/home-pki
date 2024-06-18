@@ -3,10 +3,10 @@ services:
     build: ./ocsp/
     init: true
     environment:
-        DB_HOST: database
-        DB_NAME: ${caName}
-        DB_USER: ${caName}
-        DB_PASSWORD: "${dbPassword}"
+      DB_HOST: database
+      DB_NAME: ${caName}
+      DB_USER: ${caName}
+      DB_PASSWORD: "${dbPassword}"
     networks:
       proxy-internal:
       db-internal:
@@ -16,7 +16,27 @@ services:
     depends_on:
       - database
     restart: unless-stopped
-  
+
+  ${caName}-ca:
+    image: smallstep/step-ca
+    environment:
+      PGHOST: database
+      PGDATABASE: ${caName}
+      PGUSER: ${caName}
+      # TODO: Migrate in to PGPASSFILE when compose secrets "mode" will be supported
+      PGPASSWORD: "${dbPassword}"
+    volumes:
+      - ./${caConfigDir}:/home/step/config
+      - ${caName}-ca-secrets:/home/step/secrets
+      - ${caName}-ca-certs:/home/step/certs
+    networks:
+      proxy-internal:
+      db-internal:
+    ports:
+      - 443:443
+    depends_on:
+      - database
+
   proxy:
     volumes:
       - ./${proxyFile}:/etc/nginx/conf.d/${caName}.conf

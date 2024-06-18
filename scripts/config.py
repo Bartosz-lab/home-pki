@@ -6,3 +6,4 @@ class Templates:
     dockerTemplatesDir = f"{templatesDir}/docker"
     proxyTemplatesDir = f"{templatesDir}/proxy"
     databaseTemplatesDir = f"{templatesDir}/database"
+    caTemplatesDir = f"{templatesDir}/stepca"

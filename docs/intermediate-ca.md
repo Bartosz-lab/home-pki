@@ -18,7 +18,7 @@
     # On Client
 
     24h*365d*10y=87660h = 10 years
-    step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --profile intermediate-ca --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
+    step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
     # Send intermediate_ca.crt and root_ca.crt to server.
     ```
 2. Configure Docker
@@ -43,5 +43,10 @@
           ...
           test-ocsp-data:
           test-ocsp-certs:
+          test-ca-secrets:
+          test-ca-certs:
           ...
         ```
+3. Configure database
+
+    Run `docker compose exec database sh init.sh`, this will create the database and the user for the new Intermediate CA.

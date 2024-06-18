@@ -35,9 +35,11 @@ else:
 databaseFile = f"{resultDir}/init-database.sh"
 proxyFile = f"{resultDir}/intermediate-ca.conf"
 includeFile = f"{resultDir}/intermediate-ca.yml"
+caConfigDir = f"{resultDir}/config"
 
 # Read the main config
 mainConfig = readMainConfig()
+serverName = f"{caName}.{mainConfig['domain']}"
 
 # Generate docker include file
 processTemplateAndSave(
@@ -48,6 +50,7 @@ processTemplateAndSave(
         "proxyFile": proxyFile,
         "databaseFile": databaseFile,
         "dbPassword": dbPassword,
+        "caConfigDir": caConfigDir,
     },
 )
 
@@ -62,7 +65,21 @@ processTemplateAndSave(
 processTemplateAndSave(
     f"{Templates.proxyTemplatesDir}/intermediate-ca.conf.template",
     proxyFile,
-    {"caName": caName, "serverName": f"{caName}.{mainConfig["domain"]}"},
+    {"caName": caName, "serverName": serverName},
+)
+
+# Generate CA config
+os.makedirs(caConfigDir)
+
+processTemplateAndSave(
+    f"{Templates.caTemplatesDir}/ca.json.template",
+    f"{caConfigDir}/ca.json",
+    {"serverName": serverName},
+)
+processTemplateAndSave(
+    f"{Templates.caTemplatesDir}/defaults.json.template",
+    f"{caConfigDir}/defaults.json",
+    {},
 )
 
 # Print config to attach to the main docker-compose file
