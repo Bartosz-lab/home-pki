@@ -5,3 +5,9 @@ __pycache__/
 ocsp/data/
 ocsp/certs/
 ocsp-root/data/
+
+stepca/certs/
+stepca/secrets/
+
+configs/*
+!configs/config.json

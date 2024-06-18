@@ -1,0 +1,14 @@
+include:
+  - path: 
+      - ./docker-main.yml
+      ...
+      ADD THIS LINE
+      - ./${includeFile}
+      ...
+    project_directory: ./
+
+volumes:
+  ...
+  ADD THIS LINE AND CONFIG OF VOLUME
+  ${rootName}-ocsp-data:
+  ...
