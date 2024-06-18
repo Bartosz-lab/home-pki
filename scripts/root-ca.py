@@ -1,7 +1,7 @@
+import os
 import sys
-import re
 
-from helpers import readConfig, createDir, processTemplateAndSave, processTemplate
+from helpers import saveConfig, validateName, readMainConfig, readConfigFile, createDir, processTemplateAndSave, processTemplate
 from config import Templates
 
 if len(sys.argv) != 2:
@@ -9,18 +9,20 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 rootName = sys.argv[1]
-
-# Check if the name is valid
-if not re.match(r"^[a-z0-9\-]+$", rootName):
-    print("Invalid name. Only small letters or '-' are allowed.")
-    sys.exit(1)
+validateName(rootName)
 
 resultDir = createDir(rootName)
+
+## Gnerate config variables
+if os.path.isfile(f"{resultDir}/config.json"):
+    conf = readConfigFile(f"{resultDir}/config.json")
+    rootName = conf["rootName"]
+
 
 proxyFile = f"{resultDir}/root-ca.conf"
 
 # Read config from json file
-config = readConfig()
+config = readMainConfig()
 
 # Generate docker include file
 includeFile = f"{resultDir}/root-ca.yml"
@@ -44,4 +46,12 @@ print(
         f"{Templates.dockerTemplatesDir}/root-ca-include.template",
         {"includeFile": includeFile, "rootName": rootName},
     )
+)
+
+# Save the new config
+saveConfig(
+    {
+        "rootName": rootName,
+    },
+    resultDir,
 )

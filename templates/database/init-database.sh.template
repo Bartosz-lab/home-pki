@@ -1,0 +1,12 @@
+result=$$(psql postgres -U postgres -tXAc "SELECT 1 FROM pg_roles WHERE rolname='${dbUser}'")
+
+if [ "$$result" -eq 1 ]; then
+    exit
+fi
+
+echo "Creating user and database: ${dbUser}"
+psql -v ON_ERROR_STOP=1 -U postgres <<- EOSQL
+    CREATE USER "${dbUser}" PASSWORD '${dbPassword}';
+    CREATE DATABASE "${dbUser}";
+    GRANT ALL PRIVILEGES ON DATABASE "${dbUser}" TO "${dbUser}";
+EOSQL

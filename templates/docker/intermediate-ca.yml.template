@@ -1,0 +1,26 @@
+services:
+  ${caName}-ocsp:
+    build: ./ocsp/
+    init: true
+    environment:
+        DB_HOST: database
+        DB_NAME: ${caName}
+        DB_USER: ${caName}
+        DB_PASSWORD: "${dbPassword}"
+    networks:
+      proxy-internal:
+      db-internal:
+    volumes:
+      - ${caName}-ocsp-data:/usr/src/app/data
+      - ${caName}-ocsp-certs:/usr/src/app/certs
+    depends_on:
+      - database
+    restart: unless-stopped
+  
+  proxy:
+    volumes:
+      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.conf
+
+  database:
+    volumes:
+      - ./${databaseFile}:/docker-entrypoint-initdb.d/${caName}.sh

@@ -1,0 +1,48 @@
+services:
+  proxy:
+    image: nginx:alpine
+    environment:
+      NGINX_HOST: foobar.com
+      # volumes:
+      # - ./proxy/templates:/etc/nginx/templates
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      proxy-internal:
+    restart: unless-stopped
+
+
+  database:
+      image: postgres:alpine
+      environment:
+        POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+      secrets:
+        - db-password
+      volumes:
+        - ./database/init.sh:/init.sh:Z
+        - database-data:/var/lib/postgresql/data
+      networks:
+        db-internal:
+      restart: unless-stopped
+      healthcheck:
+        test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'" ]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+        
+
+networks:
+  proxy-internal:
+    internal: true
+  db-internal:
+    internal: true
+  internal:
+
+volumes:
+  database-data:
+    
+
+secrets:
+  db-password:
+    file: ./secrets/db-password.txt
