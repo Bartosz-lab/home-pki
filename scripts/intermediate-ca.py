@@ -33,6 +33,7 @@ else:
 
 databaseFile = f"{resultDir}/init-database.sh"
 proxyFile = f"{resultDir}/intermediate-ca.http"
+proxyHttpsFile = f"{resultDir}/intermediate-ca.https"
 includeFile = f"{resultDir}/intermediate-ca.yml"
 caConfigDir = f"{resultDir}/config"
 
@@ -46,6 +47,7 @@ processTemplateAndSave(
     {
         "caName": caName,
         "proxyFile": proxyFile,
+        "proxyHttpsFile": proxyHttpsFile,
         "databaseFile": databaseFile,
         "dbPassword": dbPassword,
         "caConfigDir": caConfigDir,
@@ -63,6 +65,11 @@ processTemplateAndSave(
 processTemplateAndSave(
     f"{Templates.proxyTemplatesDir}/intermediate-ca.http.template",
     proxyFile,
+    {"caName": caName},
+)
+processTemplateAndSave(
+    f"{Templates.proxyTemplatesDir}/intermediate-ca.https.template",
+    proxyHttpsFile,
     {"caName": caName},
 )
 

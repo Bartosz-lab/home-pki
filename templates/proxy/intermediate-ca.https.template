@@ -1,0 +1,4 @@
+location /${caName}/ {
+    proxy_pass  "https://${caName}-ca:443/";
+}
+

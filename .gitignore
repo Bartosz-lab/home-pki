@@ -7,5 +7,6 @@ stepca/secrets/
 
 configs/*
 !configs/config.json
+configs-user/*
 
 data/*

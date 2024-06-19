@@ -7,11 +7,18 @@ server {
 }
 
 
-# TODO: Add HTTPS server
-#server {
-#    listen      80;
-#    listen [::]:80;
-#    server_name   ${serverName};
-#
-#    include /etc/nginx/conf.d/*.https;
-#}
+server {
+    listen      443 ssl;
+    listen [::]:443 ssl;
+    server_name   ${serverName};
+
+    ssl_certificate /etc/nginx/certs/cert.crt;
+    ssl_certificate_key /etc/nginx/certs/cert.key;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    TODO: Migrate it to intermediate config
+    proxy_ssl_trusted_certificate /etc/nginx/certs/root_ca.crt;
+
+    include /etc/nginx/conf.d/*.https;
+}

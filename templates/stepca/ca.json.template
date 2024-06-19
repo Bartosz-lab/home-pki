@@ -27,5 +27,7 @@
     "maxVersion": 1.3,
     "renegotiation": false
   },
-  "authority": {}
+  "authority": {
+    "enableAdmin": true
+  }
 }
