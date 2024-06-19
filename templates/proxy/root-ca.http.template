@@ -1,0 +1,7 @@
+location /${rootName} {
+    location /${caName}/ocsp {
+        proxy_pass  "http://${rootName}-ocsp:80/";
+    }
+
+    # TODO: Add Crl Location
+}

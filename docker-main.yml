@@ -3,13 +3,14 @@ services:
     image: nginx:alpine
     environment:
       NGINX_HOST: foobar.com
-      # volumes:
-      # - ./proxy/templates:/etc/nginx/templates
+    volumes:
+      - ./configs/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
     ports:
       - 80:80
       - 443:443
     networks:
       proxy-internal:
+      external:
     restart: unless-stopped
 
 
@@ -20,7 +21,7 @@ services:
       secrets:
         - db-password
       volumes:
-        - ./database/init.sh:/init.sh:Z
+        - ./database/init.sh:/init.sh:ro
         - database-data:/var/lib/postgresql/data
       networks:
         db-internal:
@@ -37,7 +38,8 @@ networks:
     internal: true
   db-internal:
     internal: true
-  internal:
+  external:
+
 
 volumes:
   database-data:

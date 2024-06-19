@@ -10,5 +10,5 @@ services:
   
   proxy:
     volumes:
-      - ./${proxyFile}:/etc/nginx/conf.d/${rootName}.conf
+      - ./${proxyFile}:/etc/nginx/conf.d/${rootName}.http
 

@@ -39,7 +39,7 @@ services:
 
   proxy:
     volumes:
-      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.conf
+      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.http
 
   database:
     volumes:

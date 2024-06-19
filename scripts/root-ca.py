@@ -19,7 +19,7 @@ if os.path.isfile(f"{resultDir}/config.json"):
     rootName = conf["rootName"]
 
 
-proxyFile = f"{resultDir}/root-ca.conf"
+proxyFile = f"{resultDir}/root-ca.http"
 
 # Read config from json file
 config = readMainConfig()
@@ -34,7 +34,7 @@ processTemplateAndSave(
 
 # Generate proxy config
 processTemplateAndSave(
-    f"{Templates.proxyTemplatesDir}/root-ca.conf.template",
+    f"{Templates.proxyTemplatesDir}/root-ca.http.template",
     proxyFile,
     {"rootName": rootName, "serverName": f"{rootName}.{config["domain"]}"},
 )

@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 
@@ -33,13 +32,12 @@ else:
     dbPassword = generatePassword()
 
 databaseFile = f"{resultDir}/init-database.sh"
-proxyFile = f"{resultDir}/intermediate-ca.conf"
+proxyFile = f"{resultDir}/intermediate-ca.http"
 includeFile = f"{resultDir}/intermediate-ca.yml"
 caConfigDir = f"{resultDir}/config"
 
 # Read the main config
 mainConfig = readMainConfig()
-serverName = f"{caName}.{mainConfig['domain']}"
 
 # Generate docker include file
 processTemplateAndSave(
@@ -63,9 +61,9 @@ processTemplateAndSave(
 
 # Generate proxy config
 processTemplateAndSave(
-    f"{Templates.proxyTemplatesDir}/intermediate-ca.conf.template",
+    f"{Templates.proxyTemplatesDir}/intermediate-ca.http.template",
     proxyFile,
-    {"caName": caName, "serverName": serverName},
+    {"caName": caName},
 )
 
 # Generate CA config
@@ -74,7 +72,7 @@ os.makedirs(caConfigDir)
 processTemplateAndSave(
     f"{Templates.caTemplatesDir}/ca.json.template",
     f"{caConfigDir}/ca.json",
-    {"serverName": serverName},
+    {"serverName": mainConfig["serverName"]},
 )
 processTemplateAndSave(
     f"{Templates.caTemplatesDir}/defaults.json.template",
