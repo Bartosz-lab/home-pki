@@ -10,7 +10,7 @@ from helpers import (
 from config import Templates, DefaultFileLocations
 
 
-def main(mainConfig, caName, update=False):
+def main(mainConfig, caName, update=False, rootFingerprint=None):
     validateName(caName)
 
     if update:
@@ -21,8 +21,13 @@ def main(mainConfig, caName, update=False):
 
         conf = readConfigFile(f"{configDir}/config.json")
         dbPassword = conf["dbPassword"]
+        if not rootFingerprint:
+            rootFingerprint = conf["rootFingerprint"]
     else:
         print(f"{caName}: Creating intermediate CA config files.")
+        if not rootFingerprint:
+            print("Please provide the fingerprint of the root CA.")
+            exit(1)
         configDir = DirOperations.createDir(DefaultFileLocations.configDir, caName)
 
         dbPassword = generatePassword()
@@ -79,7 +84,7 @@ def main(mainConfig, caName, update=False):
     processTemplateAndSave(
         caDefaultsTemplate,
         caDefaultsFile,
-        {"caName": caName, "fingerprint": "Unimplemented"},
+        {"caName": caName, "fingerprint": rootFingerprint},
     )
 
     # Generate docker include file

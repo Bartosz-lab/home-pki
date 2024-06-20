@@ -24,10 +24,10 @@
     # TODO: Add CRL and OCSP generation
     ```
 2. Configure Docker
-    
-    1. Run `python scripts intermediate-ca <name>`
+    1. Run `python scripts intermediate-ca <name> --fingerprint <fingerprint>`
     
         Where `<name>` is the name of the Intermediate CA that will be used in the system. Should be simple and unique. Only letters, numbers and "-" are allowed.
+        And `<fingerprint>` is the fingerprint of the Root CA certificate. Can be found in the output of `step certificate fingerprint root_ca.crt`.
     
     2. Add new include to `docker-compose.yml`, path will be in output of step 2.1
          ```yaml

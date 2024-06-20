@@ -100,6 +100,12 @@ parser_intermediate_ca.add_argument(
     help="Name of the intermediate CA.",
     type=str,
 )
+parser_intermediate_ca.add_argument(
+    "--fingerprint",
+    action="store",
+    help="Fingerprint of the root CA. Required if --update is not provided.",
+    type=str,
+)
 
 
 ###########################
@@ -169,7 +175,9 @@ match args.command:
     case "root-ca":
         root_ca.main(readConfigFile(args.config), args.name, args.update)
     case "intermediate-ca":
-        intermediate_ca.main(readConfigFile(args.config), args.name, args.update)
+        intermediate_ca.main(
+            readConfigFile(args.config), args.name, args.update, args.fingerprint
+        )
     case "generate-proxy-certs":
         generate_certs.generateProxyCert(readConfigFile(args.config))
     case "generate-ocsp-certs":
