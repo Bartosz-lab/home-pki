@@ -6,7 +6,7 @@ import secrets
 import string
 from typing import Mapping
 
-from config import configDir
+from config import DefaultFileLocations
 
 
 def validateName(name: str) -> None:
@@ -14,11 +14,6 @@ def validateName(name: str) -> None:
     if not re.match(r"^[a-z0-9\-]+$", name):
         print("Invalid name. Only small letters or '-' are allowed.")
         sys.exit(1)
-
-
-def readMainConfig() -> Mapping[str, object]:
-    """Read the configuration file."""
-    return readConfigFile(f"{configDir}/config.json")
 
 
 def readConfigFile(file: str) -> Mapping[str, object]:
@@ -33,18 +28,42 @@ def readConfigFile(file: str) -> Mapping[str, object]:
     return config
 
 
-def createDir(name: str) -> str:
-    """
-    Create a directory in configDir. Exit program if the directory already exists.
-    Return the directory path.
-    """
-    dir = f"{configDir}/{name}"
-    if os.path.exists(dir):
-        print("Result directory already exists.")
-        sys.exit(1)
+class DirOperations:
+    @staticmethod
+    def createDir(name: str) -> str:
+        """
+        Create a directory in configDir. Exit program if the directory already exists.
+        Return the directory path.
+        """
+        dir = f"{DefaultFileLocations.generatedConfigDir}/{name}"
+        if os.path.exists(dir):
+            print("Result directory already exists.")
+            sys.exit(1)
 
-    os.makedirs(dir)
-    return dir
+        os.makedirs(dir)
+        return dir
+
+    @staticmethod
+    def createDirIfNotExists(name: str) -> str:
+        """
+        Create a directory in configDir if it does not exist.
+        Return the directory path.
+        """
+        dir = f"{DefaultFileLocations.generatedConfigDir}/{name}"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        return dir
+
+    @staticmethod
+    def createDirIfNotExistsInDir(dir: str, name: str) -> str:
+        """
+        Create a directory in dir if it does not exist.
+        Return the directory path.
+        """
+        dir = f"{dir}/{name}"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        return dir
 
 
 def processTemplateAndSave(

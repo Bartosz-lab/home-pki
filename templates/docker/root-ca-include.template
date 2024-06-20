@@ -10,5 +10,5 @@ include:
 volumes:
   ...
   ADD THIS LINE AND CONFIG OF VOLUME
-  ${rootName}-ocsp-data:
+  ${caName}-ocsp-data:
   ...

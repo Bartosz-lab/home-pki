@@ -1,9 +1,9 @@
-location /${caName} {
-    location /${caName}/ocsp {
+location /${caName}/ {
+    location /${caName}/ocsp/ {
         proxy_pass  "http://${caName}-ocsp:80/";
     }
 
-    location /${caName}/crl {
+    location /${caName}/crl/ {
         proxy_pass "http://${caName}-ca:80/crl";
     }
 }

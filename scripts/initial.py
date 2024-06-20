@@ -1,25 +1,19 @@
-import os
 from helpers import (
-    validateName,
-    readMainConfig,
-    readConfigFile,
-    createDir,
     processTemplateAndSave,
-    processTemplate,
-    generatePassword,
-    saveConfig,
 )
-from config import configDir, Templates
+from config import DefaultFileLocations, Templates
 
-# Read the main config
-mainConfig = readMainConfig()
-serverName = mainConfig["serverName"]
 
-proxyFile = f"{configDir}/proxy.conf"
+def main(mainConfig):
+    print("Creating main config files.")
 
-# Generate main proxy config
-processTemplateAndSave(
-    f"{Templates.proxyTemplatesDir}/proxy.conf.template",
-    proxyFile,
-    {"serverName": serverName},
-)
+    serverName = mainConfig["serverName"]
+    proxyTemplate = f"{Templates.proxyTemplatesDir}/proxy.conf.template"
+    proxyFile = f"{DefaultFileLocations.generatedConfigDir}/proxy.conf"
+
+    # Generate main proxy config
+    processTemplateAndSave(
+        proxyTemplate,
+        proxyFile,
+        {"serverName": serverName},
+    )

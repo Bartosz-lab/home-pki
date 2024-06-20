@@ -1,14 +1,14 @@
 services:
-  ${rootName}-ocsp:
+  ${caName}-ocsp:
     build: ./ocsp-root/
     init: true
     networks:
       proxy-internal:
     volumes:
-      - ${rootName}-ocsp-data:/etc/ocsp
+      - ${caName}-ocsp-data:/etc/ocsp
     restart: unless-stopped
   
   proxy:
     volumes:
-      - ./${proxyFile}:/etc/nginx/conf.d/${rootName}.http
+      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.http
 
