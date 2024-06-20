@@ -6,12 +6,3 @@ include:
       - ./${includeFile}
       ...
     project_directory: ./
-
-volumes:
-  ...
-  ADD THIS LINES AND CONFIG OF VOLUMES
-  ${caName}-ocsp-data:
-  ${caName}-ocsp-certs:
-  ${caName}-ca-secrets:
-  ${caName}-ca-certs:
-  ...

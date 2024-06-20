@@ -4,6 +4,7 @@ import os
 from config import DefaultFileLocations
 from helpers import readConfigFile
 
+import generate_data_dir
 import initial
 import root_ca
 import intermediate_ca
@@ -24,7 +25,7 @@ config_parser = argparse.ArgumentParser(add_help=False)
 config_parser.add_argument(
     "--config",
     action="store",
-    default="configs-user/config.json",
+    default=DefaultFileLocations.mainConfigFile,
     help=f'Location of the config file. Default: "{DefaultFileLocations.mainConfigFile}"',
     type=str,
 )
@@ -35,6 +36,14 @@ update_parser.add_argument(
     help="Update the existing config files.Use when you change main config file or when updated repo to new version.",
 )
 
+###########################
+#### Generate Data Dir ####
+###########################
+parser_generate_data_dir = subparsers.add_parser(
+    "generate-data-dir",
+    help="Generate data directory.",
+    description="Generate data directory.",
+)
 
 ###########################
 ########## Update #########
@@ -102,15 +111,17 @@ if not args.command:
     parser.print_help()
     exit(1)
 
-mainConfig = readConfigFile(args.config)
 
 match args.command:
+    case "generate-data-dir":
+        generate_data_dir.main()
     case "update":
+        mainConfig = readConfigFile(args.config)
         initial.main(mainConfig)
-        for dir in os.listdir(DefaultFileLocations.generatedConfigDir):
-            if os.path.isdir(f"{DefaultFileLocations.generatedConfigDir}/{dir}"):
+        for dir in os.listdir(DefaultFileLocations.configDir):
+            if os.path.isdir(f"{DefaultFileLocations.configDir}/{dir}"):
                 conf = readConfigFile(
-                    f"{DefaultFileLocations.generatedConfigDir}/{dir}/config.json"
+                    f"{DefaultFileLocations.configDir}/{dir}/config.json"
                 )
                 if conf["type"] == "root-ca":
                     root_ca.main(mainConfig, dir, True)
@@ -118,10 +129,10 @@ match args.command:
                     intermediate_ca.main(mainConfig, dir, True)
 
     case "main-init":
-        initial.main(mainConfig)
+        initial.main(readConfigFile(args.config))
     case "root-ca":
-        root_ca.main(mainConfig, args.name, args.update)
+        root_ca.main(readConfigFile(args.config), args.name, args.update)
     case "intermediate-ca":
-        intermediate_ca.main(mainConfig, args.name, args.update)
+        intermediate_ca.main(readConfigFile(args.config), args.name, args.update)
     case _:
         parser.print_help()

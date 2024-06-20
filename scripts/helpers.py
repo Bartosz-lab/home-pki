@@ -6,8 +6,6 @@ import secrets
 import string
 from typing import Mapping
 
-from config import DefaultFileLocations
-
 
 def validateName(name: str) -> None:
     """Check if the name is valid."""
@@ -30,40 +28,29 @@ def readConfigFile(file: str) -> Mapping[str, object]:
 
 class DirOperations:
     @staticmethod
-    def createDir(name: str) -> str:
+    def createDir(dir: str, name: str) -> str:
         """
-        Create a directory in configDir. Exit program if the directory already exists.
+        Create a directory in dir.
         Return the directory path.
         """
-        dir = f"{DefaultFileLocations.generatedConfigDir}/{name}"
-        if os.path.exists(dir):
+        newDir = f"{dir}/{name}"
+        if os.path.exists(newDir):
             print("Result directory already exists.")
             sys.exit(1)
 
-        os.makedirs(dir)
-        return dir
+        os.makedirs(newDir)
+        return newDir
 
     @staticmethod
-    def createDirIfNotExists(name: str) -> str:
-        """
-        Create a directory in configDir if it does not exist.
-        Return the directory path.
-        """
-        dir = f"{DefaultFileLocations.generatedConfigDir}/{name}"
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        return dir
-
-    @staticmethod
-    def createDirIfNotExistsInDir(dir: str, name: str) -> str:
+    def createDirIfNotExists(dir: str, name: str) -> str:
         """
         Create a directory in dir if it does not exist.
         Return the directory path.
         """
-        dir = f"{dir}/{name}"
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        return dir
+        newDir = f"{dir}/{name}"
+        if not os.path.exists(newDir):
+            os.makedirs(newDir)
+        return newDir
 
 
 def processTemplateAndSave(

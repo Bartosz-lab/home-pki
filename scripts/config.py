@@ -7,7 +7,13 @@ class Templates:
 
 
 class DefaultFileLocations:
-    generatedConfigDir = "configs"
-    userProvidedConfigDir = "configs-user"
+    dataDir = "data"
 
-    mainConfigFile = f"{userProvidedConfigDir}/config.json"
+    ## Configs
+    configDir = f"{dataDir}/configs"
+    mainConfigFile = f"{dataDir}/config.json"
+
+    ## Volumes
+    volumesDir = f"{dataDir}/volumes"
+    proxyCertsVolume = f"{volumesDir}/proxy-certs"
+    databaseVolume = f"{volumesDir}/database"

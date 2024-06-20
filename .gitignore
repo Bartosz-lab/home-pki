@@ -2,11 +2,4 @@
 .venv/
 __pycache__/
 
-stepca/certs/
-stepca/secrets/
-
-configs/*
-!configs/config.json
-configs-user/*
-
 data/*

@@ -20,10 +20,12 @@
     24h*365d*10y=87660h = 10 years
     step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
     # Send intermediate_ca.crt and root_ca.crt to server.
+
+    # TODO: Add CRL and OCSP generation
     ```
 2. Configure Docker
     
-    1. Run `python scripts/intermediate-ca.py <name>`
+    1. Run `python scripts intermediate-ca <name>`
     
         Where `<name>` is the name of the Intermediate CA that will be used in the system. Should be simple and unique. Only letters, numbers and "-" are allowed.
     
@@ -33,20 +35,19 @@
             - path: 
               - ./docker-main.yml
               ...
-              - ./configs/test/intermediate-ca.yml
+              - ./data/configs/test/intermediate-ca.yml
               ...
             project_directory: ./
-        ```
-    3. Add new volumes to `docker-compose.yml`  volumes names will be in output of step 2.1
-        ```yaml
-        volumes:
-          ...
-          test-ocsp-data:
-          test-ocsp-certs:
-          test-ca-secrets:
-          test-ca-certs:
-          ...
         ```
 3. Configure database
 
     Run `docker compose exec database sh init.sh`, this will create the database and the user for the new Intermediate CA.
+
+4. Add files to config
+
+    1. Add `root_ca.crt` and `intermediate_ca.crt` to `data/configs/<name>/ca/certs/`
+    2. Add `password` and `intermediate_ca.key` to `data/configs/<name>/ca/secrets/`
+
+5. Generate OCSP certificate
+
+    TODO: Add OCSP generation

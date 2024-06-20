@@ -7,7 +7,7 @@ from helpers import (
     generatePassword,
     saveConfig,
 )
-from config import Templates
+from config import Templates, DefaultFileLocations
 
 
 def main(mainConfig, caName, update=False):
@@ -15,17 +15,32 @@ def main(mainConfig, caName, update=False):
 
     if update:
         print(f"{caName}: Updating intermediate CA config files.")
-        resultDir = DirOperations.createDirIfNotExists(caName)
+        configDir = DirOperations.createDirIfNotExists(
+            DefaultFileLocations.configDir, caName
+        )
 
-        conf = readConfigFile(f"{resultDir}/config.json")
+        conf = readConfigFile(f"{configDir}/config.json")
         dbPassword = conf["dbPassword"]
     else:
         print(f"{caName}: Creating intermediate CA config files.")
-        resultDir = DirOperations.createDir(caName)
+        configDir = DirOperations.createDir(DefaultFileLocations.configDir, caName)
+
         dbPassword = generatePassword()
 
+    # Generate config directories
+    caConfigDir = DirOperations.createDirIfNotExists(configDir, "ca")
+    caStepcaConfigDir = DirOperations.createDirIfNotExists(caConfigDir, "config")
+    DirOperations.createDirIfNotExists(caConfigDir, "secrets")
+    DirOperations.createDirIfNotExists(caConfigDir, "certs")
+
+    # Generate volume directories
+    volumesDir = DirOperations.createDirIfNotExists(
+        DefaultFileLocations.volumesDir, caName
+    )
+    ocspCertsVolume = DirOperations.createDirIfNotExists(volumesDir, "ocsp-certs")
+
     # Generate database setup file
-    databaseFile = f"{resultDir}/init-database.sh"
+    databaseFile = f"{configDir}/init-database.sh"
     databaseTemplate = f"{Templates.databaseTemplatesDir}/init-database.sh.template"
     processTemplateAndSave(
         databaseTemplate,
@@ -34,7 +49,7 @@ def main(mainConfig, caName, update=False):
     )
 
     # Generate proxy config
-    proxyFile = f"{resultDir}/intermediate-ca.http"
+    proxyFile = f"{configDir}/intermediate-ca.http"
     proxyTemplate = f"{Templates.proxyTemplatesDir}/intermediate-ca.http.template"
     processTemplateAndSave(
         proxyTemplate,
@@ -42,7 +57,7 @@ def main(mainConfig, caName, update=False):
         {"caName": caName},
     )
 
-    proxyHttpsFile = f"{resultDir}/intermediate-ca.https"
+    proxyHttpsFile = f"{configDir}/intermediate-ca.https"
     proxyHttpsTemplate = f"{Templates.proxyTemplatesDir}/intermediate-ca.https.template"
     processTemplateAndSave(
         proxyHttpsTemplate,
@@ -51,26 +66,24 @@ def main(mainConfig, caName, update=False):
     )
 
     # Generate CA config
-    caConfigDir = DirOperations.createDirIfNotExistsInDir(resultDir, "ca")
-
-    caConfigFile = f"{caConfigDir}/ca.json"
+    caConfigFile = f"{caStepcaConfigDir}/ca.json"
     caConfigTemplate = f"{Templates.caTemplatesDir}/ca.json.template"
     processTemplateAndSave(
         caConfigTemplate,
         caConfigFile,
-        {"serverName": mainConfig["serverName"]},
+        {"caName": caName, "serverName": mainConfig["serverName"]},
     )
 
-    caDefaultsFile = f"{caConfigDir}/defaults.json"
+    caDefaultsFile = f"{caStepcaConfigDir}/defaults.json"
     caDefaultsTemplate = f"{Templates.caTemplatesDir}/defaults.json.template"
     processTemplateAndSave(
         caDefaultsTemplate,
         caDefaultsFile,
-        {},
+        {"caName": caName, "fingerprint": "Unimplemented"},
     )
 
     # Generate docker include file
-    includeFile = f"{resultDir}/intermediate-ca.yml"
+    includeFile = f"{configDir}/intermediate-ca.yml"
     includeTemplate = f"{Templates.dockerTemplatesDir}/intermediate-ca.yml.template"
     processTemplateAndSave(
         includeTemplate,
@@ -82,6 +95,7 @@ def main(mainConfig, caName, update=False):
             "databaseFile": databaseFile,
             "dbPassword": dbPassword,
             "caConfigDir": caConfigDir,
+            "ocspCertsVolume": ocspCertsVolume,
         },
     )
 
@@ -102,5 +116,5 @@ def main(mainConfig, caName, update=False):
             "type": "intermediate-ca",
             "dbPassword": dbPassword,
         },
-        resultDir,
+        configDir,
     )

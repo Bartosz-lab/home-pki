@@ -9,7 +9,7 @@ def main(mainConfig):
 
     serverName = mainConfig["serverName"]
     proxyTemplate = f"{Templates.proxyTemplatesDir}/proxy.conf.template"
-    proxyFile = f"{DefaultFileLocations.generatedConfigDir}/proxy.conf"
+    proxyFile = f"{DefaultFileLocations.configDir}/proxy.conf"
 
     # Generate main proxy config
     processTemplateAndSave(

@@ -4,10 +4,8 @@ services:
     environment:
       NGINX_HOST: foobar.com
     volumes:
-      - ./configs/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
-      - ./configs-user/default_root_ca.crt:/etc/nginx/certs/root_ca.crt:ro
-      - ./configs-user/proxy.crt:/etc/nginx/certs/cert.crt:ro
-      - ./configs-user/proxy.key:/etc/nginx/certs/cert.key:ro
+      - ./data/configs/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./data/volumes/proxy-certs:/etc/nginx/certs:ro
     ports:
       - 80:80
       - 443:443
@@ -24,8 +22,8 @@ services:
       secrets:
         - db-password
       volumes:
-        - ./database/init.sh:/init.sh:ro
-        - database-data:/var/lib/postgresql/data
+        - ./static/database/init.sh:/init.sh:ro
+        - ./data/volumes/database:/var/lib/postgresql/data
       networks:
         db-internal:
       restart: unless-stopped
@@ -42,11 +40,6 @@ networks:
   db-internal:
     internal: true
   external:
-
-
-volumes:
-  database-data:
-    
 
 secrets:
   db-password:
