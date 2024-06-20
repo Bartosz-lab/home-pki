@@ -6,9 +6,3 @@ include:
       - ./${includeFile}
       ...
     project_directory: ./
-
-volumes:
-  ...
-  ADD THIS LINE AND CONFIG OF VOLUME
-  ${caName}-ocsp-data:
-  ...

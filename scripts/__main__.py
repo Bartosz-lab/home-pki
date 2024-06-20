@@ -8,6 +8,7 @@ import generate_data_dir
 import initial
 import root_ca
 import intermediate_ca
+import generate_certs
 
 
 parser = argparse.ArgumentParser(
@@ -102,6 +103,41 @@ parser_intermediate_ca.add_argument(
 
 
 ###########################
+### Generate Proxy Certs ##
+###########################
+
+parser_generate_proxy_certs = subparsers.add_parser(
+    "generate-proxy-certs",
+    help="Generate proxy certificates.",
+    description="Generate proxy certificates.",
+    parents=[config_parser],
+)
+
+###########################
+### Generate OCSP Certs ###
+###########################
+
+parser_generate_ocsp_certs = subparsers.add_parser(
+    "generate-ocsp-certs",
+    help="Generate OCSP certificates for Intermediate CA.",
+    description="Generate OCSP certificates for Intermediate CA.",
+    parents=[config_parser],
+)
+parser_generate_ocsp_certs.add_argument(
+    "name",
+    action="store",
+    help="Name of the CA.",
+    type=str,
+)
+parser_generate_ocsp_certs.add_argument(
+    "--certName",
+    action="store",
+    help='Name of the certificate. if not provided, it will be "<name> OCSP".',
+    type=str,
+)
+
+
+###########################
 ########## Parse ##########
 ###########################
 
@@ -134,5 +170,11 @@ match args.command:
         root_ca.main(readConfigFile(args.config), args.name, args.update)
     case "intermediate-ca":
         intermediate_ca.main(readConfigFile(args.config), args.name, args.update)
+    case "generate-proxy-certs":
+        generate_certs.generateProxyCert(readConfigFile(args.config))
+    case "generate-ocsp-certs":
+        generate_certs.generateOCSPCert(
+            readConfigFile(args.config), args.name, args.certName
+        )
     case _:
         parser.print_help()

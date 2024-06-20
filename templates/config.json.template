@@ -1,3 +1,4 @@
 {
-    "serverName": "localhost6"
+    "serverName": "localhost6",
+    "defaultIntermediateCA": "test"
 }
