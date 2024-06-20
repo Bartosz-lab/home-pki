@@ -25,7 +25,7 @@ def periodicCheck():
             if oldTotalCerts != totalCerts:
                 callRefresher = True
 
-            cur.execute("select * from revoked_x509_certs")
+            cur.execute("select count(*) from revoked_x509_certs")
             totalRevokedCerts = str(cur.fetchone()[0])
 
             oldTotalRevokedCerts = DataHelper.getTotalRevokedCerts()
