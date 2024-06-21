@@ -52,18 +52,22 @@
 
     Run `docker compose up -d <name>-ca`
 
-6. Generate OCSP certificate
-
+6. Generate proxy and OCSP certificates
+    - Run `python scripts generate-proxy-certs <name>`
     - Run `python scripts generate-ocsp-certs <name>`
     - When asked provide password for default StepCA provisioner - on start it same as password for private key of intermediate CA
 
 > [!WARNING]
 > If you configure default Intermediate CA, you should do additional steps from [Initial Setup](../README.md#initial-setup) before system restart and reconfiguring provisioner.
 
-7. Restart the system
+7. Add cname to DNS
+
+    Add CNAME to DNS for `<name>.<serverName>` as `<serverName>`.
+
+8. Restart the system
 
     TODO: Add restart
 
 
-8. Delete or change password for default provisioner
+9. Delete or change password for default provisioner
     See [StepCA Replace default provisioner](https://smallstep.com/docs/step-ca/certificate-authority-server-production/#replace-your-default-provisioner)

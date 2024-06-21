@@ -3,10 +3,9 @@ import os
 import shutil
 
 
-def generateProxyCert(mainConfig):
+def generateProxyCert(mainConfig, caName):
     print("Generating proxy certificate")
-    serverName = mainConfig["serverName"]
-    defaultIntermediateCA = mainConfig["defaultIntermediateCA"]
+    serverName = f"{caName}.{mainConfig['serverName']}"
 
     subprocess.run(
         [
@@ -15,8 +14,8 @@ def generateProxyCert(mainConfig):
             "run",
             "--rm",
             "-v",
-            f"{os.getcwd()}/data/volumes/proxy-certs:/proxy",
-            f"{defaultIntermediateCA}-ca",
+            f"{os.getcwd()}/data/volumes/{caName}/proxy-certs:/proxy",
+            f"{caName}-ca",
             "step",
             "ca",
             "certificate",

@@ -1,11 +1,8 @@
 services:
   proxy:
     image: nginx:alpine
-    environment:
-      NGINX_HOST: foobar.com
     volumes:
       - ./data/configs/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
-      - ./data/volumes/proxy-certs:/etc/nginx/certs:ro
     ports:
       - 80:80
       - 443:443

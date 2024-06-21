@@ -32,6 +32,8 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
 
         dbPassword = generatePassword()
 
+    serverName = f"{caName}.{mainConfig['serverName']}"
+
     # Generate config directories
     caConfigDir = DirOperations.createDirIfNotExists(configDir, "ca")
     caStepcaConfigDir = DirOperations.createDirIfNotExists(caConfigDir, "config")
@@ -43,6 +45,7 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
         DefaultFileLocations.volumesDir, caName
     )
     ocspCertsVolume = DirOperations.createDirIfNotExists(volumesDir, "ocsp-certs")
+    proxyCertsVolume = DirOperations.createDirIfNotExists(volumesDir, "proxy-certs")
 
     # Generate database setup file
     databaseFile = f"{configDir}/init-database.sh"
@@ -54,20 +57,12 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
     )
 
     # Generate proxy config
-    proxyFile = f"{configDir}/intermediate-ca.http"
-    proxyTemplate = f"{Templates.proxyTemplatesDir}/intermediate-ca.http.template"
+    proxyFile = f"{configDir}/intermediate-ca.conf"
+    proxyTemplate = f"{Templates.proxyTemplatesDir}/intermediate-ca.conf.template"
     processTemplateAndSave(
         proxyTemplate,
         proxyFile,
-        {"caName": caName},
-    )
-
-    proxyHttpsFile = f"{configDir}/intermediate-ca.https"
-    proxyHttpsTemplate = f"{Templates.proxyTemplatesDir}/intermediate-ca.https.template"
-    processTemplateAndSave(
-        proxyHttpsTemplate,
-        proxyHttpsFile,
-        {"caName": caName},
+        {"caName": caName, "serverName": serverName},
     )
 
     # Generate CA config
@@ -76,7 +71,7 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
     processTemplateAndSave(
         caConfigTemplate,
         caConfigFile,
-        {"caName": caName, "serverName": mainConfig["serverName"]},
+        {"caName": caName, "serverName": serverName},
     )
 
     caDefaultsFile = f"{caStepcaConfigDir}/defaults.json"
@@ -96,11 +91,11 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
         {
             "caName": caName,
             "proxyFile": proxyFile,
-            "proxyHttpsFile": proxyHttpsFile,
             "databaseFile": databaseFile,
             "dbPassword": dbPassword,
             "caConfigDir": caConfigDir,
             "ocspCertsVolume": ocspCertsVolume,
+            "proxyCertsVolume": proxyCertsVolume,
         },
     )
 
@@ -120,6 +115,7 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
             "caName": caName,
             "type": "intermediate-ca",
             "dbPassword": dbPassword,
+            "rootFingerprint": rootFingerprint,
         },
         configDir,
     )

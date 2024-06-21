@@ -5,7 +5,6 @@ from config import DefaultFileLocations
 from helpers import readConfigFile
 
 import generate_data_dir
-import initial
 import root_ca
 import intermediate_ca
 import generate_certs
@@ -53,17 +52,6 @@ parser_initial = subparsers.add_parser(
     "update",
     help="Update all existing config files.",
     description="Update all existing config files.",
-    parents=[config_parser],
-)
-
-
-###########################
-######## Main init ########
-###########################
-parser_initial = subparsers.add_parser(
-    "main-init",
-    help="Create main config files.",
-    description="Create main config files.",
     parents=[config_parser],
 )
 
@@ -118,6 +106,12 @@ parser_generate_proxy_certs = subparsers.add_parser(
     description="Generate proxy certificates.",
     parents=[config_parser],
 )
+parser_generate_proxy_certs.add_argument(
+    "name",
+    action="store",
+    help="Name of the CA.",
+    type=str,
+)
 
 ###########################
 ### Generate OCSP Certs ###
@@ -159,7 +153,6 @@ match args.command:
         generate_data_dir.main()
     case "update":
         mainConfig = readConfigFile(args.config)
-        initial.main(mainConfig)
         for dir in os.listdir(DefaultFileLocations.configDir):
             if os.path.isdir(f"{DefaultFileLocations.configDir}/{dir}"):
                 conf = readConfigFile(
@@ -170,8 +163,6 @@ match args.command:
                 elif conf["type"] == "intermediate-ca":
                     intermediate_ca.main(mainConfig, dir, True)
 
-    case "main-init":
-        initial.main(readConfigFile(args.config))
     case "root-ca":
         root_ca.main(readConfigFile(args.config), args.name, args.update)
     case "intermediate-ca":
@@ -179,7 +170,7 @@ match args.command:
             readConfigFile(args.config), args.name, args.update, args.fingerprint
         )
     case "generate-proxy-certs":
-        generate_certs.generateProxyCert(readConfigFile(args.config))
+        generate_certs.generateProxyCert(readConfigFile(args.config), args.name)
     case "generate-ocsp-certs":
         generate_certs.generateOCSPCert(
             readConfigFile(args.config), args.name, args.certName
