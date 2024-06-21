@@ -54,4 +54,4 @@ networks:
 
 secrets:
   db-password:
-    file: ./secrets/db-password.txt
+    file: ./data/secrets/db-password.txt

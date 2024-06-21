@@ -19,42 +19,53 @@ I use here `pki.example.com` as a domain name. You should replace it with your d
 
 ## Initial Setup
 
-1. Create configuration file
-
-    - copy `configs/config.json` to `configs-user/config.json`
-    - set all values in `configs-user/config.json`
+1. Create configuration
+    - run `python scripts generate-data-dir`
+    - set all values in `data/config.json`
       - `serverName` - dns name of the server
-      - set `serverName` in your DNS to point to the server
+      - set `serverName` in your DNS to point to this server
 
 2. Create secrets
-    TODO: Change that
-    - change default passwords in files in `secrets` folder
+    - change default database password in `data/secrets/db-password.txt`
 
-3. Run database
-
-    - `docker compose up -d database`
-
-4. Start setup of default Root CA
-      
-    - Step 1 from [Root CA](/docs/root-ca.md#initial-steps) 
-
-5. Setup Intermediate CA - this CA will be used to issue certificates used in all PKI, like OCSP, TLS, etc.
-
-    - Do [Intermediate CA](/docs/intermediate-ca.md#initial-steps)
-
-
-6. End setup of Root CA
-
-    - Next steps from [Root CA](/docs/root-ca.md#initial-steps)
-
-7. Start it 
+3. Start default services
 
     - `docker compose up -d`
-  
-8. Now you have fully working PKI with Root CA, and Intermediate CA.
+
+4. Setup first Root CA and Intermediate CA
+      
+    - [Root CA](/docs/root-ca.md#initial-steps) 
+    - [Intermediate CA](/docs/intermediate-ca.md#initial-steps)
+
+    > [!IMPORTANT]
+    > Remember to update `docker-compose.yml` with new services.
+    > Remember to restart the services after changes.
+
+5. Now you have fully working PKI with Root CA, and Intermediate CA.
   
       - Look for stepCA documentation to manage certificates. [Step CLI](https://smallstep.com/docs/step-cli/)
-      - Intermediate CA endpoint is available at `https://<name>.<serverName>/` where `<name>` is the name of the Intermediate CA.
+      - Look for [Endpoints](#endpoints) to see where you can find stepCA server, OCSP and CRL.
       - You can add more Root CAs and Intermediate CAs:
         - [Root CA](/docs/root-ca.md#initial-steps)
         - [Intermediate CA](/docs/intermediate-ca.md#initial-steps)
+
+
+## Remove services for specific CA
+
+1. remove include from `docker-compose.yml`
+
+2. remove files from `data/configs/<name>` and `data/volumes/<name>`
+
+3. restart services
+
+  Run `docker compose up -d`
+
+4. remove database
+  
+  You should remove database manually. You can use ` docker compose exec -it database psql -U postgres` and then `DROP DATABASE "<name>"; DROP USER "<name>";`
+
+5. If you remove intermediate CA, you should update Root CA with new CRL and OCSP data.
+
+  - [Root CA](/docs/root-ca.md#update-crl-and-ocsp)
+  
+  

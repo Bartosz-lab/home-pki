@@ -8,6 +8,8 @@ class Templates:
 
 
 class DefaultFileLocations:
+    dockerComposeFile = "docker-compose.yml"
+
     dataDir = "data"
 
     ## Configs
@@ -18,3 +20,6 @@ class DefaultFileLocations:
     volumesDir = f"{dataDir}/volumes"
     proxyCertsVolume = f"{volumesDir}/proxy-certs"
     databaseVolume = f"{volumesDir}/database"
+
+    ## Secrets
+    secretsDir = f"{dataDir}/secrets"

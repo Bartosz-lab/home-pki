@@ -1,0 +1,6 @@
+include:
+  - project_directory: ./
+    path:
+      - ./docker-main.yml
+      # Add CA services here
+      - ./data/configs/int1/intermediate-ca.yml

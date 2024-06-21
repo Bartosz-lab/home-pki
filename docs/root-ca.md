@@ -7,6 +7,8 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 1. Generate new Root CA key and certificate
 
+    I use here "The secure way" from [Step CA](https://smallstep.com/docs/tutorials/intermediate-ca-new-ca/) to create the Root CA and Intermediate CA.
+
     TODO: Change max path
 
     ```bash
@@ -65,3 +67,6 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
         - `ocsp.crt` is the OCSP certificate from step 2
         - `ocsp.key` is the OCSP private key from step 2
         - `index.txt` is the list of revoked certificates - empty for now
+
+
+## Update CRL and OCSP
