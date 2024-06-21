@@ -2,7 +2,8 @@ services:
   proxy:
     image: nginx:alpine
     volumes:
-      - ./data/configs/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./static/proxy/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./static/proxy/reloader.sh:/docker-entrypoint.d/reloader.sh:ro
     ports:
       - 80:80
       - 443:443
