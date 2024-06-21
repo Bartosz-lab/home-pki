@@ -46,6 +46,15 @@ services:
   database:
     volumes:
       - ./${databaseFile}:/docker-entrypoint-initdb.d/${caName}.sh:ro
+  
+  cert-renewer:
+    volumes:
+      - ./${renewCertsFile}:/scripts/${caName}.sh:ro
+      - ./${rootCaFile}:/certs/${caName}/root_ca.crt:ro
+      - ./${proxyCertsVolume}:/certs/${caName}/proxy
+      - ./${ocspCertsVolume}:/certs/${caName}/ocsp
+    depends_on:
+      - ${caName}-ca
 
 volumes:
   ${caName}-ocsp-data:

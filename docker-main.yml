@@ -30,6 +30,19 @@ services:
         interval: 10s
         timeout: 3s
         retries: 3
+
+  cert-renewer:
+    image: smallstep/step-ca
+    entrypoint: [ "sh", "/init.sh" ]
+    volumes:
+      - ./static/cert-renewer/init.sh:/init.sh:ro
+    networks:
+      proxy-internal:
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    depends_on:
+      - proxy
         
 
 networks:

@@ -4,6 +4,7 @@ class Templates:
     proxyTemplatesDir = f"{templatesDir}/proxy"
     databaseTemplatesDir = f"{templatesDir}/database"
     caTemplatesDir = f"{templatesDir}/stepca"
+    certRenewerTemplatesDir = f"{templatesDir}/cert-renewer"
 
 
 class DefaultFileLocations:

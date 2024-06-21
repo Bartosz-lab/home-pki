@@ -37,8 +37,8 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
     # Generate config directories
     caConfigDir = DirOperations.createDirIfNotExists(configDir, "ca")
     caStepcaConfigDir = DirOperations.createDirIfNotExists(caConfigDir, "config")
+    caCertsDir = DirOperations.createDirIfNotExists(caConfigDir, "certs")
     DirOperations.createDirIfNotExists(caConfigDir, "secrets")
-    DirOperations.createDirIfNotExists(caConfigDir, "certs")
 
     # Generate volume directories
     volumesDir = DirOperations.createDirIfNotExists(
@@ -82,6 +82,18 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
         {"caName": caName, "fingerprint": rootFingerprint},
     )
 
+    # Generate refresh certs script
+    renewCertsFile = f"{configDir}/cert-renew.sh"
+    renewCertsTemplate = f"{Templates.certRenewerTemplatesDir}/cert-renew.sh.template"
+    processTemplateAndSave(
+        renewCertsTemplate,
+        renewCertsFile,
+        {
+            "caName": caName,
+            "proxyCertsVolume": proxyCertsVolume,
+        },
+    )
+
     # Generate docker include file
     includeFile = f"{configDir}/intermediate-ca.yml"
     includeTemplate = f"{Templates.dockerTemplatesDir}/intermediate-ca.yml.template"
@@ -96,6 +108,8 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
             "caConfigDir": caConfigDir,
             "ocspCertsVolume": ocspCertsVolume,
             "proxyCertsVolume": proxyCertsVolume,
+            "renewCertsFile": renewCertsFile,
+            "rootCaFile": f"{caCertsDir}/root_ca.crt",
         },
     )
 
