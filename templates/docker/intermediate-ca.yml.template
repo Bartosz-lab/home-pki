@@ -32,6 +32,8 @@ services:
       - ./${caConfigDir}:/home/step:ro
     networks:
       proxy-internal:
+        aliases:
+          - ${serverName}
       db-internal:
     ports:
       - 443:443

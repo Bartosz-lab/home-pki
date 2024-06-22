@@ -107,6 +107,7 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
             "proxyCertsVolume": proxyCertsVolume,
             "renewCertsFile": renewCertsFile,
             "rootCaFile": f"{caCertsDir}/root_ca.crt",
+            "serverName": serverName,
         },
     )
 
