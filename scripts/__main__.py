@@ -101,6 +101,22 @@ parser_intermediate_ca.add_argument(
     type=str,
 )
 
+###########################
+### Generate Provisioner ##
+###########################
+
+parser_generate_provisioner = subparsers.add_parser(
+    "generate-provisioner",
+    help="Generate provisioner certificates.",
+    description="Generate provisioner certificates.",
+    parents=[config_parser],
+)
+parser_generate_provisioner.add_argument(
+    "name",
+    action="store",
+    help="Name of the Intermediate CA",
+    type=str,
+)
 
 ###########################
 ### Generate Proxy Certs ##
@@ -116,12 +132,6 @@ parser_generate_proxy_certs.add_argument(
     "name",
     action="store",
     help="Name of the CA.",
-    type=str,
-)
-parser_generate_proxy_certs.add_argument(
-    "--intCa",
-    action="store",
-    help="Name of the intermediate CA for generating OCSP and proxy certs. If not provided, it will be same as CA name.",
     type=str,
 )
 
@@ -145,12 +155,6 @@ parser_generate_ocsp_certs.add_argument(
     "--certName",
     action="store",
     help='Name of the certificate. if not provided, it will be "<name> OCSP".',
-    type=str,
-)
-parser_generate_ocsp_certs.add_argument(
-    "--intCa",
-    action="store",
-    help="Name of the intermediate CA for generating OCSP and proxy certs. If not provided, it will be same as CA name.",
     type=str,
 )
 
@@ -187,19 +191,13 @@ match args.command:
         intermediate_ca.main(
             readConfigFile(args.config), args.name, args.update, args.fingerprint
         )
+    case "generate-provisioner":
+        generate_certs.createProvisioner(readConfigFile(args.config), args.name)
     case "generate-proxy-certs":
-        generate_certs.generateProxyCert(
-            readConfigFile(args.config), args.name, args.intCa
-        )
+        generate_certs.generateProxyCert(readConfigFile(args.config), args.name)
     case "generate-ocsp-certs":
-        if args.intCa is None:
-
-            generate_certs.generateOCSPCert(
-                readConfigFile(args.config), args.name, args.certName
-            )
-        else:
-            generate_certs.generateOCSPCertForRootCA(
-                readConfigFile(args.config), args.name, args.intCa, args.certName
-            )
+        generate_certs.generateOCSPCert(
+            readConfigFile(args.config), args.name, args.certName
+        )
     case _:
         parser.print_help()

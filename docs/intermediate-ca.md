@@ -59,9 +59,12 @@
 
 6. Generate proxy and OCSP certificates
 
+    - Run `python scripts generate-internal-provisioner <name>`
+        - When asked about new password leave it empty
+        - When asked about password for default provisioner provide password for private key of intermediate CA
+        - When asked to provide provisioner password, provide password printed in line `✔ Password: <password>`
     - Run `python scripts generate-proxy-certs <name>`
     - Run `python scripts generate-ocsp-certs <name>`
-    - When asked provide password for default StepCA provisioner - on start it same as password for private key of intermediate CA
 
 7. Add CNAME to DNS for `<name>.<serverName>` as `<serverName>`.
 
@@ -71,3 +74,6 @@
 
 9. Delete or change password for default provisioner
     See [StepCA Replace default provisioner](https://smallstep.com/docs/step-ca/certificate-authority-server-production/#replace-your-default-provisioner)
+
+    > [!WARNING]
+    > Do not remove internal provisioner, it is used by the system.

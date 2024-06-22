@@ -69,3 +69,7 @@ I use here `pki.example.com` as a domain name. You should replace it with your d
   - [Root CA](/docs/root-ca.md#update-crl-and-ocsp)
   
   
+## Limitations
+
+- System is not ready for production use.
+- You can't use mtls to renew certificates. When you use `step ca renew` you need to provide `--mtls=false` flag.

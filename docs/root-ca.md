@@ -58,9 +58,8 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 6. Generate proxy and OCSP certificates
 
-    - Run `python scripts generate-proxy-certs <name> --intCa <intCa>`
-    - Run `python scripts generate-ocsp-certs <name> --intCa <intCa>`
-    - When asked provide password for intermediate CA provisioner
+    - Run `python scripts generate-proxy-certs <name>`
+    - Run `python scripts generate-ocsp-certs <name>`
 
 7. Add CNAME to DNS for `<name>.<serverName>` as `<serverName>`.
 
