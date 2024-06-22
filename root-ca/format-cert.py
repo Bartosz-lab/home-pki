@@ -4,12 +4,11 @@ import sys
 
 from OpenSSL import crypto
 
-if len(sys.argv) != 3:
-    print("Usage: format-cert.py <cert-file> <index-file>")
+if len(sys.argv) != 2:
+    print("Usage: format-cert.py <cert-file>")
     sys.exit(1)
 
 certFile = sys.argv[1]
-indexFile = sys.argv[2]
 
 with open(certFile, "r") as f:
     data = f.read()
@@ -26,5 +25,5 @@ dn = "".join(
     ]
 )
 
-with open(indexFile, "a") as f:
+with open("index.txt", "a") as f:
     f.write(f"V\t{notAfter}\t\t{serial}\tunknown\t{dn}\n")

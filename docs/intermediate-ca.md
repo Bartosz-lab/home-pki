@@ -14,12 +14,15 @@
     # Send intermediate_ca.csr to client.
     ```
 
+     Get `intermediate.tpl` from `root-ca` folder.\
+     See [Endpoints](/README.md#endpoints) to get the correct values for `crlDistributionPoints` and `ocspServer`.
+
+    
     ```bash
-    # On Client
+     # On Client (Local)
 
     24h*365d*10y=87660h = 10 years
-    TODO: Edit the template
-    step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
+    step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template intermediate.tpl --set  crlDistributionPoints=http://<rootName>.<serverName>/crl --set  ocspServer=http://<rootName>.<serverName>/ocsp > intermediate_ca.crt
     # Send intermediate_ca.crt and root_ca.crt to server.
     ```
 
@@ -60,7 +63,7 @@
 
 6. Generate proxy and OCSP certificates
 
-    - Run `python scripts generate-internal-provisioner <name>`
+    - Run `python scripts generate-provisioner <name>`
         - When asked about new password leave it empty
         - When asked about password for default provisioner provide password for private key of intermediate CA
         - When asked to provide provisioner password, provide password printed in line `✔ Password: <password>`

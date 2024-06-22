@@ -26,12 +26,7 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
     Follow the steps in [Intermediate CA](./intermediate-ca.md) to create an Intermediate CA.
 
-3. Generate CRL
-
-    See [Update CRL and OCSP](#update-crl-and-ocsp) for more information.
-    Do not do last step. Not restart the OCSP container.
-
-4. Configure Docker
+3. Configure Docker
 
     1. Run `python scripts root-ca <name> --intCa <intCa>`
 
@@ -48,6 +43,11 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
               - ./configs/test/root-ca.yml
               ...
         ```
+
+4. Generate CRL
+
+    See [Update CRL and OCSP](#update-crl-and-ocsp) for more information.
+    Do not do last step. Not restart the OCSP container.
 
 5. Add files to config in `data/volumes/<name>/ocsp-data/`
 
@@ -71,11 +71,11 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 On client copy `root-ca` folder from repository and go to it.
 
-1. Run `python format-cert.py <intermediate-ca-name>`
+1. Run `python format-cert.py <intermediate-file-name>`
 
-    Where `<intermediate-ca-name>` is the name of the Intermediate CA created in step 2. 
+    Where `<intermediate-file-name>` is the name of the Intermediate CA created in step 2. 
 
-2. Run `openssl ca -gencrl -config openssl.cnf -cert <root-ca-cert> -keyfile <root-ca-key> -out crl.crt`
+2. Run `openssl ca -gencrl -config openssl.conf -cert <root-ca-cert> -keyfile <root-ca-key> -out crl.crt`
     Where `<root-ca-cert>` is the root CA certificate from step 1 and `<root-ca-key>` is the root CA key from step 1.
 
 3. Copy `crl.crt` to `data/configs/<name>/crl.crt`
