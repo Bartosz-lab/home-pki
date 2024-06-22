@@ -34,7 +34,7 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 4. Configure Docker
 
-    1. Run `python scripts/root-ca.py <name> --intCa <intCa>`
+    1. Run `python scripts root-ca <name> --intCa <intCa>`
 
         Where `<name>` is the name of the Root CA that will be used in the system. Should be simple and unique. Only letters, numbers and "-" are allowed.
         And `<intCa>` is the name of the Intermediate CA created in step 2. 
