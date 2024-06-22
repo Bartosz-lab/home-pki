@@ -88,10 +88,7 @@ def main(mainConfig, caName, update=False, rootFingerprint=None):
     processTemplateAndSave(
         renewCertsTemplate,
         renewCertsFile,
-        {
-            "caName": caName,
-            "proxyCertsVolume": proxyCertsVolume,
-        },
+        {"caName": caName, "intermediateCaName": caName},
     )
 
     # Generate docker include file

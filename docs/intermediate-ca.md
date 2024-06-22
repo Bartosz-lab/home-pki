@@ -20,9 +20,13 @@
     24h*365d*10y=87660h = 10 years
     step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
     # Send intermediate_ca.crt and root_ca.crt to server.
-
-    # TODO: Add CRL and OCSP generation
     ```
+
+    > [!IMPORTANT]
+    > Remember to add information about the Intermediate CA to the Root CA index file.
+    > [Update CRL and OCSP](/docs/root-ca.md#update-crl-and-ocsp)
+
+
 2. Configure Docker
 
     1. Run `python scripts intermediate-ca <name> --fingerprint <fingerprint>`
@@ -33,12 +37,12 @@
     2. Add new include to `docker-compose.yml`, path will be in output of step 2.1
          ```yaml
         include:
-            - path: 
+            - project_directory: ./
+              path: 
               - ./docker-main.yml
               ...
               - ./data/configs/test/intermediate-ca.yml
               ...
-            project_directory: ./
         ```
 3. Configure database
 

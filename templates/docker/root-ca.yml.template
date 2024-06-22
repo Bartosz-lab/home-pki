@@ -7,11 +7,21 @@ services:
     networks:
       proxy-internal:
     volumes:
-      # TODO: Change This
-      - ${caName}-ocsp-data:/etc/ocsp
+      - ./${ocspDataVolume}:/etc/ocsp:ro
     restart: unless-stopped
   
   proxy:
     volumes:
-      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.http
+      - ./${proxyFile}:/etc/nginx/conf.d/${caName}.conf:ro
+      - ./${proxyCertsVolume}:/etc/nginx/certs/${caName}:ro
+      - ./${rootCaFile}:/etc/nginx/root-ca/${caName}/ca.crt:ro
+  
+  cert-renewer:
+    volumes:
+      - ./${renewCertsFile}:/scripts/${caName}.sh:ro
+      - ./${rootCaFile}:/certs/${caName}/root_ca.crt:ro
+      - ./${proxyCertsVolume}:/certs/${caName}/proxy
+      - ./${ocspDataVolume}:/certs/${caName}/ocsp
+    depends_on:
+      - ${intermediateCaName}-ca
 

@@ -58,7 +58,7 @@ I use here `pki.example.com` as a domain name. You should replace it with your d
 
 3. restart services
 
-  Run `docker compose up -d`
+  Run `docker compose up -d --remove-orphans`
 
 4. remove database
   

@@ -3,9 +3,12 @@ import os
 import shutil
 
 
-def generateProxyCert(mainConfig, caName):
+def generateProxyCert(mainConfig, caName, intermediateCaName=None):
     print("Generating proxy certificate")
     serverName = f"{caName}.{mainConfig['serverName']}"
+
+    if intermediateCaName is None:
+        intermediateCaName = caName
 
     subprocess.run(
         [
@@ -15,7 +18,7 @@ def generateProxyCert(mainConfig, caName):
             "--rm",
             "-v",
             f"{os.getcwd()}/data/volumes/{caName}/proxy-certs:/proxy",
-            f"{caName}-ca",
+            f"{intermediateCaName}-ca",
             "step",
             "ca",
             "certificate",
@@ -48,6 +51,33 @@ def generateOCSPCert(mainConfig, caName, certName=None):
             "-v",
             f"{os.getcwd()}/data/volumes/{caName}/ocsp-certs:/ocsp",
             f"{caName}-ca",
+            "step",
+            "ca",
+            "certificate",
+            certName,
+            "/ocsp/ocsp.crt",
+            "/ocsp/ocsp.key",
+        ],
+    )
+    print("OCSP certificate generated")
+
+
+def generateOCSPCertForRootCA(mainConfig, caName, intermediateCaName, certName=None):
+    print("Generating OCSP certificate")
+
+    if certName is None:
+        certName = f"{caName} OCSP"
+
+    # TODO: This should be special certificate for OCSP
+    subprocess.run(
+        [
+            "docker",
+            "compose",
+            "run",
+            "--rm",
+            "-v",
+            f"{os.getcwd()}/data/volumes/{caName}/ocsp-data:/ocsp",
+            f"{intermediateCaName}-ca",
             "step",
             "ca",
             "certificate",

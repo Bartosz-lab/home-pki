@@ -1,8 +1,8 @@
 include:
-  - path: 
+  - project_directory: ./
+    path: 
       - ./docker-main.yml
       ...
       ADD THIS LINE
       - ./${includeFile}
       ...
-    project_directory: ./
