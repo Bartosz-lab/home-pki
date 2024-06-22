@@ -15,6 +15,7 @@ services:
       - ./${proxyFile}:/etc/nginx/conf.d/${caName}.conf:ro
       - ./${proxyCertsVolume}:/etc/nginx/certs/${caName}:ro
       - ./${rootCaFile}:/etc/nginx/root-ca/${caName}/ca.crt:ro
+      - ./${crlFile}:/etc/nginx/root-ca/${caName}/crl.crt:ro
   
   cert-renewer:
     volumes:

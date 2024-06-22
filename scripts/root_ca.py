@@ -73,6 +73,7 @@ def main(mainConfig, caName, update=False, intermediateCaName=None):
             "proxyCertsVolume": proxyCertsVolume,
             "rootCaFile": f"{ocspDataVolume}/ca.crt",
             "intermediateCaName": intermediateCaName,
+            "crlFile": f"{configDir}/crl.pem",
         },
     )
 

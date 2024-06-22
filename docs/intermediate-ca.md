@@ -18,6 +18,7 @@
     # On Client
 
     24h*365d*10y=87660h = 10 years
+    TODO: Edit the template
     step certificate sign intermediate_ca.csr root_ca.crt root_ca.key --password-file root_ca_password.txt --not-after 87660h --template stepca/templates/intermediate.tpl --set-file stepca/templates/intermediate-data.json > intermediate_ca.crt
     # Send intermediate_ca.crt and root_ca.crt to server.
     ```

@@ -35,7 +35,7 @@ def __getCerts(
             cert = crypto.load_certificate(crypto.FILETYPE_ASN1, data)
 
             # Year should be 2 digits
-            notAfter = cert.get_notAfter().decode("utf-8")[2:-1]
+            notAfter = cert.get_notAfter().decode("utf-8")[2:]
             serial = format(cert.get_serial_number(), "X")
             status = "V" if notAfter > nowDate else "E"
 

@@ -9,8 +9,6 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
     I use here "The secure way" from [Step CA](https://smallstep.com/docs/tutorials/intermediate-ca-new-ca/) to create the Root CA and Intermediate CA.
 
-    TODO: Change max path
-
     ```bash
     # On Client
 
@@ -30,7 +28,8 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 3. Generate CRL
 
-    TODO: Add CRL generation
+    See [Update CRL and OCSP](#update-crl-and-ocsp) for more information.
+    Do not do last step. Not restart the OCSP container.
 
 4. Configure Docker
 
@@ -70,4 +69,17 @@ System can have multiple Root CAs, for each CA you repeat the steps below.
 
 ## Update CRL and OCSP
 
-TODO: Describe how to update CRL and OCSP
+On client copy `root-ca` folder from repository and go to it.
+
+1. Run `python format-cert.py <intermediate-ca-name>`
+
+    Where `<intermediate-ca-name>` is the name of the Intermediate CA created in step 2. 
+
+2. Run `openssl ca -gencrl -config openssl.cnf -cert <root-ca-cert> -keyfile <root-ca-key> -out crl.crt`
+    Where `<root-ca-cert>` is the root CA certificate from step 1 and `<root-ca-key>` is the root CA key from step 1.
+
+3. Copy `crl.crt` to `data/configs/<name>/crl.crt`
+4. Copy `index.txt` to `data/volumes/<name>/ocsp-data/index.txt`
+5. Restart ocsp container
+
+    Run `docker compose restart <name>-ocsp`
