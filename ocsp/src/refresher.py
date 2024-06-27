@@ -44,7 +44,7 @@ def __getCerts(
             )
 
 
-def __getCevoked(
+def __getRevoked(
     resultMap: Dict[int, str],
     cursor: Cursor[Any] | ServerCursor[Any],
     full: bool = False,
@@ -101,7 +101,7 @@ def refresh(
 
         with conn.cursor() as cursor:
             __getCerts(resultMap, cursor, full)
-            __getCevoked(resultMap, cursor, full)
+            __getRevoked(resultMap, cursor, full)
 
     DataHelper.setIndexData(resultMap)
 

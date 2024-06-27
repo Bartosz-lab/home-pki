@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY ./init_container.sh /usr/src/app/init_container.sh
 
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl inotify-tools
 
 # Its only checking the availability of the OCSP server
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --start-interval=5s --retries=2 \

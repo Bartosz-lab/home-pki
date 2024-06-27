@@ -3,7 +3,7 @@ FROM python:3-alpine
 WORKDIR /usr/src/app
 
 # ocsp responder
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl gcc musl-dev libffi-dev inotify-tools
 
 # python ocsp database refresher
 COPY requirements.txt ./

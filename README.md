@@ -73,3 +73,6 @@ I use here `pki.example.com` as a domain name. You should replace it with your d
 
 - System is not ready for production use.
 - You can't use mtls to renew certificates. When you use `step ca renew` you need to provide `--mtls=false` flag.
+
+## Known issues  
+  - `root-ca/format-cert` cuts leading zeros in serial number. 

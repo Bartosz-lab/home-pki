@@ -51,6 +51,13 @@ def main():
     sys.stdout.flush()
     subprocess.Popen(
         [
+            "inotifyd",
+            "reboot",
+            "/usr/src/app/certs/ocsp.crt:c",
+        ]
+    )
+    subprocess.Popen(
+        [
             "openssl",
             "ocsp",
             "-index",

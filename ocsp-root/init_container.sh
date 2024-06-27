@@ -1,8 +1,8 @@
-if [ ! -f /etc/ocsp/index.txt.attr ] ; then
-    echo "unique_subject=no" > /etc/ocsp/index.txt.attr
-fi
+#!/bin/sh
 
-/usr/bin/openssl ocsp \
+inotifyd reboot /etc/ocsp/ocsp.crt:c &
+
+openssl ocsp \
     -index /etc/ocsp/index.txt \
     -port 80 \
     -rsigner /etc/ocsp/ocsp.crt \
@@ -11,5 +11,3 @@ fi
     -multi 4 \
     -timeout 3600 \
     -ignore_err
-
-exec crond -f
