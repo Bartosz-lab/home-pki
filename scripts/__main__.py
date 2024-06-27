@@ -8,6 +8,7 @@ import generate_data_dir
 import root_ca
 import intermediate_ca
 import generate_certs
+import backup
 
 
 parser = argparse.ArgumentParser(
@@ -160,6 +161,16 @@ parser_generate_ocsp_certs.add_argument(
 
 
 ###########################
+######### Backup ##########
+###########################
+
+parser_backup = subparsers.add_parser(
+    "backup",
+    help="Backup the PKI.",
+    description="Backup the PKI.",
+)
+
+###########################
 ########## Parse ##########
 ###########################
 
@@ -199,5 +210,7 @@ match args.command:
         generate_certs.generateOCSPCert(
             readConfigFile(args.config), args.name, args.certName
         )
+    case "backup":
+        backup.main()
     case _:
         parser.print_help()

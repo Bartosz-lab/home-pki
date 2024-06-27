@@ -29,5 +29,4 @@ def main():
 
     # Create volumes directory
     os.makedirs(DefaultFileLocations.volumesDir)
-    os.makedirs(DefaultFileLocations.proxyCertsVolume)
     os.makedirs(DefaultFileLocations.databaseVolume)

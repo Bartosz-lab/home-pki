@@ -68,7 +68,16 @@ I use here `pki.example.com` as a domain name. You should replace it with your d
 
   - [Root CA](/docs/root-ca.md#update-crl-and-ocsp)
   
-  
+
+## Backup 
+
+- `python scripts backup`
+- backup will be saved in `backup/backup-pki.tar.gz`
+- script do not backup certificates and keys for proxy and ocsp. You should regenerate them after restore.
+
+
+
+
 ## Limitations
 
 - System is not ready for production use.

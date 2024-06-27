@@ -18,7 +18,6 @@ class DefaultFileLocations:
 
     ## Volumes
     volumesDir = f"{dataDir}/volumes"
-    proxyCertsVolume = f"{volumesDir}/proxy-certs"
     databaseVolume = f"{volumesDir}/database"
 
     ## Secrets
